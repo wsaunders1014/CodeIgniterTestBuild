@@ -1,0 +1,41 @@
+<html>
+<head>
+</head>
+<body>
+	<h1>Front End</h1>
+	<div id="add-user-form">
+	  <form id="add-theatre">
+		<input type="text" name="name" placeholder="Enter Theatre Name"/><br/>
+		<input type="text" name="zipcode" placeholder="Enter Theatre Zipcode"/><br/>
+		<input type="text" name="city" placeholder="Enter Theatre City"/><br/>
+		<button id="submit" type="submit"> SUBMIT</button>
+	  </form>
+	</div>
+	<br/>
+	<div id="theatres"></div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		loadUsers();
+		$('#submit').on('click', function(e){
+			e.preventDefault();
+			$.post('api/theatres', $('#add-theatre').serialize())
+			.done(function(res){
+				console.log(res);
+				//loadUsers();
+				$('#theatres').append('<div>'+res.name+' - '+res.zipcode+'</div>');
+			});
+		})
+	});
+	function loadUsers(){
+		$.getJSON('api/theatres', function(res){
+			$('#theatres').html('');
+			$.each(res, function(key,val){
+				$('#theatres').append('<div>'+res[key].name+' - '+res[key].zipcode+'</div>');
+			})
+		});
+	}
+	</script>
+</body>
+</html>
